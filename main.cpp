@@ -42,6 +42,7 @@ void cadastrarProduto(Produtos *produto, int &contador);
 void cadastrarEstado(Estado *estado, int &contador);
 void cadastrarFornecedor(Fornecedor *fornecedor, int &contador);
 
+void incluirFornecedor(Fornecedor *fornecedorN, Fornecedor *fornecedorA, int &contador);
 int main()
 {
     setlocale(LC_ALL, "Portuguese");
@@ -51,6 +52,7 @@ int main()
     Tipo tipo[t];
     Produtos produto[t];
     Fornecedor fornecedor[t];
+    Fornecedor fornecedorN[t];
 
     int contEstado = 0;
     int contTipo = 0;
@@ -148,6 +150,7 @@ int main()
                 {
                 case 1:
                     system("cls");
+                    incluirFornecedor(fornecedorN, fornecedor, contFornecedor);
                     opcao2 = 0;
                     break;
 
@@ -317,4 +320,13 @@ void cadastrarFornecedor(struct Fornecedor fornecedor[], int &contador)
     }
     contador = i - 1;
     system("cls");
+}
+
+void incluirFornecedor(Fornecedor fornecedorN[], Fornecedor fornecedorA[], int &contador) {
+    Fornecedor fornecedorT[t];
+
+    int i = 0, j = 0, k = 0;
+    for (i; i < contador && k < 1; j++) {
+
+    }
 }
