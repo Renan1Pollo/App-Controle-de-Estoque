@@ -324,9 +324,17 @@ void cadastrarFornecedor(struct Fornecedor fornecedor[], int &contador)
 
 void incluirFornecedor(Fornecedor fornecedorN[], Fornecedor fornecedorA[], int &contador) {
     Fornecedor fornecedorT[t];
+    int contFornecedorT = 0;
 
+    cadastrarFornecedor(fornecedorT, contFornecedorT);
     int i = 0, j = 0, k = 0;
-    for (i; i < contador && k < 1; j++) {
-
+    for (i; i < contador && k < 1; k++) {
+        if (fornecedorA[i].idFornecedor < fornecedorT[j].idFornecedor) {
+            fornecedorN[k] = fornecedorA[i];
+            i++;
+        } else {
+            fornecedorN[k] = fornecedorT[j];
+            j++;
+        }
     }
 }
