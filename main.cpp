@@ -1,5 +1,5 @@
 #include <iostream>
-#include <locale.h>
+#include <clocale>
 #include <cstring>
 #define t 20
 
@@ -34,12 +34,14 @@ struct Fornecedor {
 
 void cadastrarTipo(Tipo *tipo, int &contador);
 void cadastrarProduto(Produtos *produto, int &contador, Tipo *tipo, int contTipo ,Fornecedor *fornecedor, int contFornecedor);
+void cadastrarFornecedor(Fornecedor *fornecedor, int &contador, Estado *estado, int contEstado);
 void cadastrarEstado(Estado *estado, int &contador);
-void cadastrarFornecedor(Fornecedor *fornecedor, int &contador);
 
-void incluirFornecedor(Fornecedor *fornecedorN, Fornecedor *fornecedorA, int &contador);
+void incluirFornecedor(Fornecedor *fornecedorN, Fornecedor *fornecedorA, int &contador, Estado *estado, int contEstado);
+
+bool buscarEstado(int codEstado, Estado *estado, int contEstado);
 int main() {
-    setlocale(LC_ALL, "Portuguese");
+    setlocale(LC_ALL, "portuguese");
     int opcao = 0;
 
     Estado estado[t];
@@ -89,7 +91,7 @@ int main() {
 
                 case 2:
                     system("cls");
-                    cadastrarFornecedor(fornecedor, contFornecedor);
+                    cadastrarFornecedor(fornecedor, contFornecedor, estado, contEstado);
                     opcao1 = 0;
                     break;
 
@@ -138,7 +140,7 @@ int main() {
                 switch (opcao2) {
                 case 1:
                     system("cls");
-                    incluirFornecedor(fornecedorN, fornecedor, contFornecedor);
+                    incluirFornecedor(fornecedorN, fornecedor, contFornecedor, estado, contEstado);
                     opcao2 = 0;
                     break;
 
@@ -224,14 +226,14 @@ void cadastrarProduto(Produtos *produtos, int &contador, Tipo *tipos, int contTi
             cout << endl;
             for(int j = 0; j < contTipo; j++){
 			    cout<<"\t\t===== Listagem de Tipos =====" << endl;
-			    cout<<"\tCodigo: "<<tipos[j].idTipo << endl;
-			    cout<<"\tDescricao: "<<tipos[j].descricao << endl;
+			    cout<<"\t Codigo: "<<tipos[j].idTipo << endl;
+			    cout<<"\t Descricao: "<<tipos[j].descricao << endl;
 		    }
             cout << " Tipo: ";
             cin >> produtos[i].codTipo;
             cout << endl;
             for(int j = 0; j < contFornecedor; j++){
-			    cout<<"\t\tListagem de Fornecedores" << endl;
+			    cout<<"\t\t===== Listagem de Fornecedores =====" << endl;
 			    cout<<"\tCodigo: " << fornecedor[j].idFornecedor << endl;
 			    cout<<"\tNome: " << fornecedor[j].nome << endl;
 		    }
@@ -272,7 +274,7 @@ void cadastrarEstado(Estado estados[], int &contador) {
     }
     contador = i - 1;
 }
-void cadastrarFornecedor(Fornecedor fornecedor[], int &contador) {
+void cadastrarFornecedor(Fornecedor fornecedor[], int &contador, Estado estado[], int contEstado) {
     int saida = 0;
     int i;
     for (i = 0; i < t && saida != -1; i++) {
@@ -290,6 +292,14 @@ void cadastrarFornecedor(Fornecedor fornecedor[], int &contador) {
             cin >> fornecedor[i].telefone;
             cout << " Codigo do estado: ";
             cin >> fornecedor[i].codUf;
+
+            bool resultado = buscarEstado(fornecedor[i].codUf, estado, contEstado);
+            while (!resultado) {
+               cout << "\n\t ===== Codigo do Estado invalido =====" << endl;
+               cout << " Codigo do estado: ";
+               cin >> fornecedor[i].codUf;
+               resultado = buscarEstado(fornecedor[i].codUf, estado, contEstado);
+            }
             cout << " Cnpj: ";
             cin >> fornecedor[i].cnpj;
 
@@ -302,13 +312,13 @@ void cadastrarFornecedor(Fornecedor fornecedor[], int &contador) {
     system("cls");
 }
 
-void incluirFornecedor(Fornecedor fornecedorN[], Fornecedor fornecedorA[], int &contador) {
+void incluirFornecedor(Fornecedor fornecedorN[], Fornecedor fornecedorA[], int &contador, Estado estado[], int contEstado) {
     Fornecedor fornecedorT[t];
     int contFornecedorT = 0;
-    cadastrarFornecedor(fornecedorT, contFornecedorT);
+    cadastrarFornecedor(fornecedorT, contFornecedorT, estado, contEstado);
 
     int i = 0, j = 0, k = 0;
-    for (i; i < contador && k < 1; k++) {
+    for (; i < contador && k < 1; k++) {
         if (fornecedorA[i].idFornecedor < fornecedorT[j].idFornecedor) {
             fornecedorN[k] = fornecedorA[i];
             i++;
@@ -330,3 +340,27 @@ void incluirFornecedor(Fornecedor fornecedorN[], Fornecedor fornecedorA[], int &
     cout << "Fornecedores Inseridos com Sucesso" << endl;
     system("PAUSE");
 }
+
+bool buscarEstado(int codEstado, Estado estado[], int contEstado) {
+    int inicio = 0;
+    int final = contEstado;
+    int meio = (inicio + final)/2;
+
+    for (; final >= inicio && codEstado != estado[meio].idEstado; meio = (inicio + final) / 2){
+        if (codEstado > estado[meio].idEstado)
+            inicio = meio + 1;
+        else
+            final = meio - 1;
+    }
+
+    if (codEstado == estado[meio].idEstado) {
+        cout << "\nEstado Encontrado" << endl;
+        cout << "Codigo do Estado: " << estado[meio].idEstado << endl;
+        cout << "Nome do Estado: " << estado[meio].nome << endl;
+        return true;
+    } else {
+        cout << "\n\n Estado nao Encontrado" << endl;
+        return false;
+    }
+}
+
