@@ -5,14 +5,11 @@
 
 using namespace std;
 
-
-struct Tipo
-{
+struct Tipo {
     int idTipo;
     string descricao;
 };
-struct Produtos
-{
+struct Produtos {
     int idProduto;
     string descricao;
     int codTipo;
@@ -22,13 +19,11 @@ struct Produtos
     int estoqueMax;
     float valorUnit;
 };
-struct Estado
-{
+struct Estado {
     int idEstado;
     string nome;
 };
-struct Fornecedor
-{
+struct Fornecedor {
     int idFornecedor;
     string nome;
     string endereco;
@@ -38,13 +33,12 @@ struct Fornecedor
 };
 
 void cadastrarTipo(Tipo *tipo, int &contador);
-void cadastrarProduto(Produtos *produto, int &contador);
+void cadastrarProduto(Produtos *produto, int &contador, Tipo *tipo, int contTipo ,Fornecedor *fornecedor, int contFornecedor);
 void cadastrarEstado(Estado *estado, int &contador);
 void cadastrarFornecedor(Fornecedor *fornecedor, int &contador);
 
 void incluirFornecedor(Fornecedor *fornecedorN, Fornecedor *fornecedorA, int &contador);
-int main()
-{
+int main() {
     setlocale(LC_ALL, "Portuguese");
     int opcao = 0;
 
@@ -59,8 +53,7 @@ int main()
     int contProduto = 0;
     int contFornecedor = 0;
 
-    while (opcao != 7)
-    {
+    while (opcao != 7) {
         system("cls");
         cout << "\t\tSistema de controle de estoque\n\n";
         cout << "1 - Cadastros" << endl;
@@ -71,13 +64,11 @@ int main()
         cout << "\nEscolha uma opcao: ";
         cin >> opcao;
 
-        switch (opcao)
-        {
+        switch (opcao) {
         case 1:
             system("cls");
             int opcao1;
-            while (opcao1 != 5)
-            {
+            while (opcao1 != 5) {
                 system("cls");
                 cout << "\t\tCadastros\n\n";
                 cout << "1 - Produto" << endl;
@@ -89,11 +80,10 @@ int main()
                 cout << "\n\nEscolha uma opcao: ";
                 cin >> opcao1;
 
-                switch (opcao1)
-                {
+                switch (opcao1) {
                 case 1:
                     system("cls");
-                    cadastrarProduto(produto, contProduto);
+                    cadastrarProduto(produto, contProduto, tipo, contTipo ,fornecedor, contFornecedor);
                     opcao1 = 0;
                     break;
 
@@ -135,8 +125,7 @@ int main()
             system("cls");
 
             int opcao2;
-            while (opcao2 != 3)
-            {
+            while (opcao2 != 3) {
                 system("cls");
                 cout << "\t\tInserir novos Cadastros\n\n";
                 cout << "1 - Fornecedor" << endl;
@@ -146,8 +135,7 @@ int main()
                 cout << "\n\nEscolha uma opcao: ";
                 cin >> opcao2;
 
-                switch (opcao2)
-                {
+                switch (opcao2) {
                 case 1:
                     system("cls");
                     incluirFornecedor(fornecedorN, fornecedor, contFornecedor);
@@ -201,48 +189,52 @@ int main()
     }
 }
 
-void cadastrarTipo(struct Tipo tipos[], int &contador)
-{
+void cadastrarTipo(Tipo tipos[], int &contador) {
     int saida = 0;
     int i;
-    for (i = 0; i < t && saida != -1; i++)
-    {
+    for (i = 0; i < t && saida != -1; i++) {
         cout << "\t\tCadastro tipo\n\n";
         cout << "\tSe desejar sair digite o ID como -1\n\n";
 
         cout << "ID: ";
         cin >> tipos[i].idTipo;
-        if (tipos[i].idTipo != -1)
-        {
+        if (tipos[i].idTipo != -1) {
             cout << "Descricao: ";
             cin >> tipos[i].descricao;
             system("cls");
-        }
-        else
-        {
+        } else {
             saida = -1;
         }
     }
     contador = i - 1;
     system("cls");
 }
-void cadastrarProduto(struct Produtos produtos[], int &contador)
-{
+void cadastrarProduto(Produtos *produtos, int &contador, Tipo *tipos, int contTipo ,Fornecedor *fornecedor, int contFornecedor) {
     int saida = 0;
     int i;
-    for (i = 0; i < t && saida != -1; i++)
-    {
+    for (i = 0; i < t && saida != -1; i++) {
         cout << "\t\tCadastro produto\n\n";
         cout << "\tSe desejar sair digite o ID como -1\n\n";
 
         cout << " ID: ";
         cin >> produtos[i].idProduto;
-        if (produtos[i].idProduto != -1)
-        {
+        if (produtos[i].idProduto != -1) {
             cout << " Descricao: ";
             cin >> produtos[i].descricao;
+            cout << endl;
+            for(int j = 0; j < contTipo; j++){
+			    cout<<"\t\t===== Listagem de Tipos =====" << endl;
+			    cout<<"\tCodigo: "<<tipos[j].idTipo << endl;
+			    cout<<"\tDescricao: "<<tipos[j].descricao << endl;
+		    }
             cout << " Tipo: ";
             cin >> produtos[i].codTipo;
+            cout << endl;
+            for(int j = 0; j < contFornecedor; j++){
+			    cout<<"\t\tListagem de Fornecedores" << endl;
+			    cout<<"\tCodigo: " << fornecedor[j].idFornecedor << endl;
+			    cout<<"\tNome: " << fornecedor[j].nome << endl;
+		    }
             cout << " Codigo do fornecedor: ";
             cin >> produtos[i].codFornecedor;
             cout << " Quantidade em estoque: ";
@@ -254,52 +246,42 @@ void cadastrarProduto(struct Produtos produtos[], int &contador)
             cout << " Valor unitario: ";
             cin >> produtos[i].valorUnit;
             system("cls");
-        }
-        else
-        {
+        } else {
             saida = -1;
         }
     }
     contador = i - 1;
     system("cls");
 }
-void cadastrarEstado(struct Estado estados[], int &contador)
-{
+void cadastrarEstado(Estado estados[], int &contador) {
     int saida = 0;
     int i;
-    for (i = 0; i < t && saida != -1; i++)
-    {
+    for (i = 0; i < t && saida != -1; i++) {
         cout << "\t\tCadastro estado\n\n";
         cout << "\tSe desejar sair digite o ID como -1\n";
 
         cout << "\n ID: ";
         cin >> estados[i].idEstado;
-        if (estados[i].idEstado != -1)
-        {
+        if (estados[i].idEstado != -1) {
             cout << " Nome do estado: ";
             cin >> estados[i].nome;
             system("cls");
-        }
-        else
-        {
+        } else {
             saida = -1;
         }
     }
     contador = i - 1;
 }
-void cadastrarFornecedor(struct Fornecedor fornecedor[], int &contador)
-{
+void cadastrarFornecedor(Fornecedor fornecedor[], int &contador) {
     int saida = 0;
     int i;
-    for (i = 0; i < t && saida != -1; i++)
-    {
+    for (i = 0; i < t && saida != -1; i++) {
         cout << "\t\tCadastro fornecedor\n\n";
         cout << "\tSe desejar sair digite o ID como -1\n";
 
         cout << " ID: ";
         cin >> fornecedor[i].idFornecedor;
-        if (fornecedor[i].idFornecedor != -1)
-        {
+        if (fornecedor[i].idFornecedor != -1) {
             cout << " Nome do fornecedor: ";
             cin >> fornecedor[i].nome;
             cout << " Endereco: ";
@@ -312,9 +294,7 @@ void cadastrarFornecedor(struct Fornecedor fornecedor[], int &contador)
             cin >> fornecedor[i].cnpj;
 
             system("cls");
-        }
-        else
-        {
+        } else {
             saida = -1;
         }
     }
@@ -325,8 +305,8 @@ void cadastrarFornecedor(struct Fornecedor fornecedor[], int &contador)
 void incluirFornecedor(Fornecedor fornecedorN[], Fornecedor fornecedorA[], int &contador) {
     Fornecedor fornecedorT[t];
     int contFornecedorT = 0;
-
     cadastrarFornecedor(fornecedorT, contFornecedorT);
+
     int i = 0, j = 0, k = 0;
     for (i; i < contador && k < 1; k++) {
         if (fornecedorA[i].idFornecedor < fornecedorT[j].idFornecedor) {
@@ -337,4 +317,16 @@ void incluirFornecedor(Fornecedor fornecedorN[], Fornecedor fornecedorA[], int &
             j++;
         }
     }
+
+    for (; i < contador; i++) {
+        fornecedorN[k] = fornecedorA[i];
+        k++;
+    }
+
+    for (; j < 1; j++) {
+        fornecedorN[k] = fornecedorT[j];
+        k++;
+    }
+    cout << "Fornecedores Inseridos com Sucesso" << endl;
+    system("PAUSE");
 }
