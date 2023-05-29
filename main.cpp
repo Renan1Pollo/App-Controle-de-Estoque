@@ -248,8 +248,8 @@ void cadastrarProduto(Produtos *produtos, int &contador, Tipo *tipos, int contTi
 
             for(int j = 0; j < contFornecedor; j++){
 			    cout<<"\t\t ===== Listagem de Fornecedores =====" << endl;
-			    cout<<"\tCodigo: " << fornecedor[j].idFornecedor << endl;
-			    cout<<"\tNome: " << fornecedor[j].nome << endl;
+			    cout<<"\t Codigo: " << fornecedor[j].idFornecedor << endl;
+			    cout<<"\t Nome: " << fornecedor[j].nome << endl;
 		    }
             cout << " Codigo do fornecedor: ";
             cin >> produtos[i].codFornecedor;
@@ -359,7 +359,14 @@ void incluirFornecedor(Fornecedor fornecedorN[], Fornecedor fornecedorA[], int &
         fornecedorN[k] = fornecedorT[j];
         k++;
     }
-    cout << "Fornecedores Inseridos com Sucesso" << endl;
+
+    // gravando dados no array original
+    int x = 0;
+    for (; x < k; x++) {
+        fornecedorA[x] = fornecedorN[x];
+    }
+    contador = x;
+    cout << "\t\t===== Fornecedores Inseridos com Sucesso =====" << endl;
     system("PAUSE");
 }
 void incluirProdutos(Produtos produtoA[], Produtos produtoN[], int &contador, Fornecedor fornecedor[], int contFornecedor, Tipo tipo[], int contTipo) {
@@ -387,7 +394,7 @@ void incluirProdutos(Produtos produtoA[], Produtos produtoN[], int &contador, Fo
         produtoN[k] = produtoT[j];
         k++;
     }
-    cout << "Produtos Inseridos com Sucesso" << endl;
+    cout << "\t ===== Produtos Inseridos com Sucesso =====" << endl;
     system("PAUSE");
 }
 
@@ -425,12 +432,11 @@ bool buscarFornecedor(int codFornecedor, Fornecedor *fornecedor, int contFornece
     }
 
     if (codFornecedor == fornecedor[meio].idFornecedor) {
-        cout << "\nFornecedor Encontrado" << endl;
-        cout << "Codigo do Fornecedor: " << fornecedor[meio].idFornecedor << endl;
-        cout << "Nome do Fornecedor: " << fornecedor[meio].nome << endl;
+        cout << "\n ===== Fornecedor Encontrado =====" << endl;
+        cout << " Codigo do Fornecedor: " << fornecedor[meio].idFornecedor << endl;
+        cout << " Nome do Fornecedor: " << fornecedor[meio].nome << endl << endl;
         return true;
     } else {
-        cout << "\n\n Fornecedor nao Encontrado" << endl;
         return false;
     }
 }
