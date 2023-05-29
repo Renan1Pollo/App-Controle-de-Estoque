@@ -33,7 +33,7 @@ struct Fornecedor {
 };
 
 void cadastrarTipo(Tipo *tipo, int &contador);
-void cadastrarProduto(Produtos *produto, int &contador, Tipo *tipo, int contTipo ,Fornecedor *fornecedor, int contFornecedor);
+void cadastrarProduto(Produtos *produtoA, Produtos *produtoB, int &contador, Tipo *tipo, int contTipo ,Fornecedor *fornecedor, int contFornecedor);
 void cadastrarFornecedor(Fornecedor *fornecedor, int &contador, Estado *estado, int contEstado);
 void cadastrarEstado(Estado *estado, int &contador);
 
@@ -90,7 +90,7 @@ int main() {
                 switch (opcao1) {
                 case 1:
                     system("cls");
-                    cadastrarProduto(produto, contProduto, tipo, contTipo ,fornecedor, contFornecedor);
+                    cadastrarProduto(produto, produtoN, contProduto, tipo, contTipo ,fornecedor, contFornecedor);
                     opcao1 = 0;
                     break;
 
@@ -216,7 +216,7 @@ void cadastrarTipo(Tipo tipos[], int &contador) {
     contador = i - 1;
     system("cls");
 }
-void cadastrarProduto(Produtos *produtos, int &contador, Tipo *tipos, int contTipo ,Fornecedor *fornecedor, int contFornecedor) {
+void cadastrarProduto(Produtos *produtosA, Produtos *produtoB, int &contador, Tipo *tipos, int contTipo ,Fornecedor *fornecedor, int contFornecedor) {
     int saida = 0;
     int i;
     for (i = 0; i < t && saida != -1; i++) {
@@ -224,10 +224,18 @@ void cadastrarProduto(Produtos *produtos, int &contador, Tipo *tipos, int contTi
         cout << "\tSe desejar sair digite o ID como -1\n\n";
 
         cout << " ID: ";
-        cin >> produtos[i].idProduto;
-        if (produtos[i].idProduto != -1) {
+        cin >> produtosA[i].idProduto;
+        if (produtosA[i].idProduto != -1) {
+            bool resultadoCodigo = verificarCodigoDoProduto(produtosA[i].idProduto, produtoB, contador);
+            if(!resultadoCodigo) {
+                cout << "\n ===== Codigo já cadastrado! =====";
+                cout << "\n ID: ";
+                cin >> produtosA[i].idProduto;
+                resultadoCodigo = verificarCodigoDoProduto(produtosA[i].idProduto, produtoB, contador);
+                
+            }
             cout << " Descricao: ";
-            cin >> produtos[i].descricao;
+            cin >> produtosA[i].descricao;
             cout << endl;
 
             for(int j = 0; j < contTipo; j++){
@@ -236,14 +244,14 @@ void cadastrarProduto(Produtos *produtos, int &contador, Tipo *tipos, int contTi
 			    cout<<"\t Descricao: "<<tipos[j].descricao << endl;
 		    }
             cout << " Tipo: ";
-            cin >> produtos[i].codTipo;
+            cin >> produtosA[i].codTipo;
             cout << endl;
-            bool resultadoTipo = buscarTipo(produtos[i].codTipo, tipos, contTipo);
+            bool resultadoTipo = buscarTipo(produtosA[i].codTipo, tipos, contTipo);
             while (!resultadoTipo) {
                cout << "\n\t ===== Codigo do Tipo invalido =====" << endl;
                cout << " Tipo: ";
-               cin >> produtos[i].codTipo;
-               resultadoTipo = buscarTipo(produtos[i].codTipo, tipos, contTipo);
+               cin >> produtosA[i].codTipo;
+               resultadoTipo = buscarTipo(produtosA[i].codTipo, tipos, contTipo);
             }
 
             for(int j = 0; j < contFornecedor; j++){
@@ -252,23 +260,23 @@ void cadastrarProduto(Produtos *produtos, int &contador, Tipo *tipos, int contTi
 			    cout<<"\tNome: " << fornecedor[j].nome << endl;
 		    }
             cout << " Codigo do fornecedor: ";
-            cin >> produtos[i].codFornecedor;
-            bool resultado = buscarFornecedor(produtos[i].codFornecedor, fornecedor, contFornecedor);
+            cin >> produtosA[i].codFornecedor;
+            bool resultado = buscarFornecedor(produtosA[i].codFornecedor, fornecedor, contFornecedor);
             while (!resultado) {
                cout << "\n\t ===== Codigo do Fornecedor invalido =====" << endl;
                cout << " Codigo do Fornecedor: ";
-               cin >> produtos[i].codFornecedor;
-               resultado = buscarFornecedor(produtos[i].codFornecedor, fornecedor, contFornecedor);
+               cin >> produtosA[i].codFornecedor;
+               resultado = buscarFornecedor(produtosA[i].codFornecedor, fornecedor, contFornecedor);
             }
 
             cout << " Quantidade em estoque: ";
-            cin >> produtos[i].qtdEstoque;
+            cin >> produtosA[i].qtdEstoque;
             cout << " Estoque minimo: ";
-            cin >> produtos[i].estoqueMin;
+            cin >> produtosA[i].estoqueMin;
             cout << " Estoque maximo: ";
-            cin >> produtos[i].estoqueMax;
+            cin >> produtosA[i].estoqueMax;
             cout << " Valor unitario: ";
-            cin >> produtos[i].valorUnit;
+            cin >> produtosA[i].valorUnit;
             system("cls");
         } else {
             saida = -1;
@@ -359,13 +367,14 @@ void incluirFornecedor(Fornecedor fornecedorN[], Fornecedor fornecedorA[], int &
         fornecedorN[k] = fornecedorT[j];
         k++;
     }
+    contador = k;
     cout << "Fornecedores Inseridos com Sucesso" << endl;
     system("PAUSE");
 }
 void incluirProdutos(Produtos produtoA[], Produtos produtoN[], int &contador, Fornecedor fornecedor[], int contFornecedor, Tipo tipo[], int contTipo) {
     Produtos produtoT[t];
     int contProdutoT = 0;
-    cadastrarProduto(produtoT, contProdutoT, tipo, contTipo, fornecedor, contFornecedor);
+    cadastrarProduto(produtoT, produtoA, contProdutoT, tipo, contTipo, fornecedor, contFornecedor);
 
     int i = 0, j = 0, k = 0;
     for (; i < contador && k < 1; k++) {
