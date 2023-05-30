@@ -45,6 +45,8 @@ bool buscarEstado(int codEstado, Estado *estado, int contEstado);
 bool buscarFornecedor(int codFornecedor, Fornecedor *fornecedor, int contFornecedor);
 bool verificarCodigoDoProduto(int codProduto, Produtos *produto, int contProduto);
 
+void zerarProdutos(Produtos *produtoN);
+
 int main() {
     setlocale(LC_ALL, "portuguese");
     int opcao = 0;
@@ -64,12 +66,12 @@ int main() {
     while (opcao != 7) {
         system("cls");
         cout << "\t\tSistema de controle de estoque\n\n";
-        cout << "1 - Cadastros" << endl;
-        cout << "2 - Inclusao" << endl;
-        cout << "3 - Venda" << endl;
-        cout << "4 - Mostrar" << endl;
-        cout << "7 - Sair" << endl;
-        cout << "\nEscolha uma opcao: ";
+        cout << " 1 - Cadastros" << endl;
+        cout << " 2 - Inclusao" << endl;
+        cout << " 3 - Venda" << endl;
+        cout << " 4 - Mostrar" << endl;
+        cout << " 7 - Sair" << endl;
+        cout << "\n Escolha uma opcao: ";
         cin >> opcao;
 
         switch (opcao) {
@@ -78,19 +80,20 @@ int main() {
             int opcao1;
             while (opcao1 != 5) {
                 system("cls");
-                cout << "\t\tCadastros\n\n";
-                cout << "1 - Produto" << endl;
-                cout << "2 - Fornecedor" << endl;
-                cout << "3 - Tipo" << endl;
-                cout << "4 - Estado" << endl;
-                cout << "5 - Voltar";
+                cout << "\t\t Cadastros\n\n";
+                cout << " 1 - Produto" << endl;
+                cout << " 2 - Fornecedor" << endl;
+                cout << " 3 - Tipo" << endl;
+                cout << " 4 - Estado" << endl;
+                cout << " 5 - Voltar";
 
-                cout << "\n\nEscolha uma opcao: ";
+                cout << "\n\n Escolha uma opcao: ";
                 cin >> opcao1;
 
                 switch (opcao1) {
                 case 1:
                     system("cls");
+                    zerarProdutos(produtoN);
                     cadastrarProduto(produto, produtoN, contProduto, tipo, contTipo ,fornecedor, contFornecedor);
                     opcao1 = 0;
                     break;
@@ -100,27 +103,23 @@ int main() {
                     cadastrarFornecedor(fornecedor, contFornecedor, estado, contEstado);
                     opcao1 = 0;
                     break;
-
                 case 3:
                     system("cls");
                     cadastrarTipo(tipo, contTipo);
                     opcao1 = 0;
                     break;
-
                 case 4:
                     system("cls");
                     cadastrarEstado(estado, contEstado);
                     opcao1 = 0;
                     break;
-
                 case 5:
                     system("cls");
                     cout << "Voltando...\n\n\n";
                     break;
-
                 default:
                     system("cls");
-                    cout << "Opcao invalida! Informe um valor entre 1 e 5.\n\n\n";
+                    cout << " Opcao invalida! Informe um valor entre 1 e 5.\n\n\n";
                     system("pause");
                     opcao1 = 0;
                     break;
@@ -128,19 +127,18 @@ int main() {
             }
             opcao1 = 0;
             break;
-
         case 2:
             system("cls");
 
             int opcao2;
             while (opcao2 != 3) {
                 system("cls");
-                cout << "\t\tInserir novos Cadastros\n\n";
-                cout << "1 - Fornecedor" << endl;
-                cout << "2 - Produto" << endl;
-                cout << "3 - Voltar";
+                cout << "\t\t Inserir novos Cadastros\n\n";
+                cout << " 1 - Fornecedor" << endl;
+                cout << " 2 - Produto" << endl;
+                cout << " 3 - Voltar";
 
-                cout << "\n\nEscolha uma opcao: ";
+                cout << "\n\n Escolha uma opcao: ";
                 cin >> opcao2;
 
                 switch (opcao2) {
@@ -149,20 +147,17 @@ int main() {
                     incluirFornecedor(fornecedorN, fornecedor, contFornecedor, estado, contEstado);
                     opcao2 = 0;
                     break;
-
                 case 2:
                     system("cls");
                     incluirProdutos(produto, produtoN, contProduto, fornecedor, contFornecedor, tipo, contTipo);
                     break;
-
                 case 3:
                     system("cls");
                     cout << "Voltando...\n\n\n";
                     break;
-
                 default:
                     system("cls");
-                    cout << "Opcao invalida!\n\n\n";
+                    cout << " Opcao invalida!\n\n\n";
                     system("pause");
                     opcao2 = 0;
                     break;
@@ -188,7 +183,7 @@ int main() {
 
         default:
             system("cls");
-            cout << "Opcao invalida! Informe um valor entre 1 e 7.\n\n\n";
+            cout << " Opcao invalida! Informe um valor entre 1 e 7.\n\n\n";
             system("pause");
             opcao = 0;
             break;
@@ -219,10 +214,6 @@ void cadastrarTipo(Tipo tipos[], int &contador) {
 void cadastrarProduto(Produtos *produtosA, Produtos *produtoB, int &contador, Tipo *tipos, int contTipo ,Fornecedor *fornecedor, int contFornecedor) {
     int saida = 0;
     int i;
-    for(int j = 0; j < contador; j++) {
-        cout << "Vetor de Comparacao A\n";
-        cout << produtoB[j].idProduto << " | " << produtoB[j].descricao << endl;
-    }
 
     for (i = 0; i < t && saida != -1; i++) {
         cout << "\t\tCadastro produto\n\n";
@@ -231,13 +222,13 @@ void cadastrarProduto(Produtos *produtosA, Produtos *produtoB, int &contador, Ti
         cout << " ID: ";
         cin >> produtosA[i].idProduto;
         if (produtosA[i].idProduto > 0) {
+
             bool resultadoCodigo = verificarCodigoDoProduto(produtosA[i].idProduto, produtoB, contador);
-            if(!resultadoCodigo) {
+            while (!resultadoCodigo) {
                 cout << "\n ===== Codigo ja cadastrado! =====";
                 cout << "\n ID: ";
                 cin >> produtosA[i].idProduto;
                 resultadoCodigo = verificarCodigoDoProduto(produtosA[i].idProduto, produtoB, contador);
-                
             }
             cout << " Descricao: ";
             cin >> produtosA[i].descricao;
@@ -487,10 +478,21 @@ bool verificarCodigoDoProduto(int codProduto, Produtos *produto, int contProduto
     }
 
     if (codProduto == produto[meio].idProduto) {
-        cout << "\n\n Produto com codigo " << codProduto << " Ja cadastrado!" << endl;
         return false;
     } else {
         return true;
     }
 }
 
+void zerarProdutos(Produtos produtoN[]) {
+    for (int i = 0; i < t; i++) {
+        produtoN[i].idProduto = 0;
+        produtoN[i].descricao = "";
+        produtoN[i].codTipo = 0;
+        produtoN[i].codFornecedor = 0;
+        produtoN[i].qtdEstoque = 0;
+        produtoN[i].estoqueMin = 0;
+        produtoN[i].estoqueMax = 0;
+        produtoN[i].valorUnit = 0.0;
+    }
+}
