@@ -44,6 +44,7 @@ bool buscarTipo(int codTipo, Tipo *tipo, int contTipo);
 bool buscarEstado(int codEstado, Estado *estado, int contEstado);
 bool buscarFornecedor(int codFornecedor, Fornecedor *fornecedor, int contFornecedor);
 bool verificarCodigoDoProduto(int codProduto, Produtos *produto, int contProduto);
+
 int main() {
     setlocale(LC_ALL, "portuguese");
     int opcao = 0;
@@ -172,7 +173,6 @@ int main() {
 
         case 3:
             system("cls");
-
             break;
 
         case 4:
@@ -205,7 +205,7 @@ void cadastrarTipo(Tipo tipos[], int &contador) {
 
         cout << "ID: ";
         cin >> tipos[i].idTipo;
-        if (tipos[i].idTipo != -1) {
+        if (tipos[i].idTipo > 0) {
             cout << "Descricao: ";
             cin >> tipos[i].descricao;
             system("cls");
@@ -219,16 +219,21 @@ void cadastrarTipo(Tipo tipos[], int &contador) {
 void cadastrarProduto(Produtos *produtosA, Produtos *produtoB, int &contador, Tipo *tipos, int contTipo ,Fornecedor *fornecedor, int contFornecedor) {
     int saida = 0;
     int i;
+    for(int j = 0; j < contador; j++) {
+        cout << "Vetor de Comparacao A\n";
+        cout << produtoB[j].idProduto << " | " << produtoB[j].descricao << endl;
+    }
+
     for (i = 0; i < t && saida != -1; i++) {
         cout << "\t\tCadastro produto\n\n";
         cout << "\tSe desejar sair digite o ID como -1\n\n";
 
         cout << " ID: ";
         cin >> produtosA[i].idProduto;
-        if (produtosA[i].idProduto != -1) {
+        if (produtosA[i].idProduto > 0) {
             bool resultadoCodigo = verificarCodigoDoProduto(produtosA[i].idProduto, produtoB, contador);
             if(!resultadoCodigo) {
-                cout << "\n ===== Codigo já cadastrado! =====";
+                cout << "\n ===== Codigo ja cadastrado! =====";
                 cout << "\n ID: ";
                 cin >> produtosA[i].idProduto;
                 resultadoCodigo = verificarCodigoDoProduto(produtosA[i].idProduto, produtoB, contador);
@@ -294,7 +299,7 @@ void cadastrarEstado(Estado estados[], int &contador) {
 
         cout << "\n ID: ";
         cin >> estados[i].idEstado;
-        if (estados[i].idEstado != -1) {
+        if (estados[i].idEstado > 0) {
             cout << " Nome do estado: ";
             cin >> estados[i].nome;
             system("cls");
@@ -313,7 +318,7 @@ void cadastrarFornecedor(Fornecedor fornecedor[], int &contador, Estado estado[]
 
         cout << " ID: ";
         cin >> fornecedor[i].idFornecedor;
-        if (fornecedor[i].idFornecedor != -1) {
+        if (fornecedor[i].idFornecedor > 0) {
             cout << " Nome do fornecedor: ";
             cin >> fornecedor[i].nome;
             cout << " Endereco: ";
@@ -367,8 +372,6 @@ void incluirFornecedor(Fornecedor fornecedorN[], Fornecedor fornecedorA[], int &
         fornecedorN[k] = fornecedorT[j];
         k++;
     }
-    contador = k;
-    cout << "Fornecedores Inseridos com Sucesso" << endl;
     // gravando dados no array original
     int x = 0;
     for (; x < k; x++) {
@@ -484,7 +487,7 @@ bool verificarCodigoDoProduto(int codProduto, Produtos *produto, int contProduto
     }
 
     if (codProduto == produto[meio].idProduto) {
-        cout << "\n\n Produto com codigo " << codProduto << " Já cadastrado!" << endl;
+        cout << "\n\n Produto com codigo " << codProduto << " Ja cadastrado!" << endl;
         return false;
     } else {
         return true;
