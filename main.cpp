@@ -39,6 +39,8 @@ void cadastrarEstado(Estado *estado, int &contador);
 
 void incluirFornecedor(Fornecedor *fornecedorN, Fornecedor *fornecedorA, int &contador, Estado *estado, int contEstado);
 void incluirProdutos(Produtos *produtoA, Produtos *produtoN, int &contador, Fornecedor *fornecedor, int contFornecedor, Tipo *tipo, int contTipo);
+// void vendaProduto(Produtos *produto, int contProduto, nProd, contFornecedor, fornecedor, tipo, contTipo);
+
 
 bool buscarTipo(int codTipo, Tipo *tipo, int contTipo);
 bool buscarEstado(int codEstado, Estado *estado, int contEstado);
@@ -168,6 +170,7 @@ int main() {
 
         case 3:
             system("cls");
+            
             break;
 
         case 4:
