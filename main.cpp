@@ -539,3 +539,45 @@ bool buscarProduto(int codProduto, Produtos produto[], int contProduto) {
         return true;
     }
 }
+
+void adicionarVenda(Produto produtos[], Fornecedor fornecedores[], TipoProd tipos[], int contProdutos, int contFornecedores, int contTipos) {
+	int aux, id;
+	char r;
+	cout << "-----ADICIONAR--VENDA-----" << endl;
+	cout << "Digite o Codigo do Produto que Deseja Realizar a Venda: ";
+	cin >> id;
+	
+	id = buscarProduto(p, id, t);
+	id = aux;
+	cout << "Descri��o do Produto: " << p[id].desc << endl;
+	cout << "Quantidade de Estoque: " << p[id].qtdeEstoque << endl;
+	cout << "Valor Unit�rio: "<< p[id].valor << endl;
+	
+	aux = buscarTipo(tipo, p[id].codTipo, t2);
+	cout << "Descri��o do Tipo: " << tipo[aux].desc << endl;
+	
+	aux = buscarFornecedor(f, p[id].codFornecedor, t);
+	cout << "Nome do Fornecedor: " << f[aux].nome << endl;
+	
+	cout << "--------------------------" << endl;
+	cout << " Digite a Quantidade a ser Vendida deste Produto: ";
+	cin >> aux;
+	while(aux > p[id].qtdeEstoque) {
+		cout << "-----PEDIDO--ACIMA--DO--LIMITE-----" << endl;
+		cout << "\tLimite: " << p[id].qtdeEstoque << endl;
+		cout << " Digite a Quantidade a ser Vendida deste Produto: ";
+		cin >> aux;
+	}
+	cout << " Total do Pedido: R$ " << aux * p[id].valor <<endl;
+	cout << " Deseja Confirmar a Compra(S/N): ";
+	cin >> r;
+	r = toupper(r);
+	if(r == 'S') {
+		cout << "Venda Confirmada" << endl;
+		p[id].qtdeEstoque -= aux;
+	}
+	else {
+		cout << "Venda Cancelada" << endl;
+	}
+	system("PAUSE");
+}
