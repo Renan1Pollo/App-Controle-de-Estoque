@@ -340,7 +340,7 @@ void cadastrarNovoProduto(Produtos produtosT[], Produtos produtosA[], int &conta
             bool resultadoProduto = buscarProduto(produtosT[i].idProduto, produtosA, contadorA);
             while (!resultadoProduto) {
                 cout << "\n\t ===== Codigo ja cadastrado! =====" << endl;
-                cout << "ID: ";
+                cout << " ID: ";
                 cin >> produtosT[i].idProduto;
                 resultadoProduto = buscarProduto(produtosT[i].idProduto, produtosA, contadorA);
             }
