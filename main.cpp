@@ -40,11 +40,13 @@ void cadastrarNovoProduto(Produtos *produtos, Produtos *produtosA, int &contador
 
 void incluirFornecedor(Fornecedor *fornecedorN, Fornecedor *fornecedorA, int &contador, Estado *estado, int contEstado);
 void incluirProdutos(Produtos *produtosA, Produtos *produtosB, int &contador, Fornecedor *fornecedor, int contFornecedor, Tipo *tipo, int contTipo);
+void adicionarVenda(Produtos *produtos, Fornecedor *fornecedores, Tipo *tipos, int contProdutos, int contFornecedores, int contTipos);
 
 bool buscarTipo(int codTipo, Tipo *tipo, int contTipo);
 bool buscarEstado(int codEstado, Estado *estado, int contEstado);
 bool buscarFornecedor(int codFornecedor, Fornecedor *fornecedor, int contFornecedor);
 bool buscarProduto(int codProduto, Produtos *produto, int contProduto);
+int buscarProduto2(int codProduto, Produtos produto[], int contProduto);
 
 int main() {
     setlocale(LC_ALL, "portuguese");
@@ -166,7 +168,7 @@ int main() {
 
         case 3:
             system("cls");
-            
+            adicionarVenda(produto, fornecedor, tipo, contProduto, contFornecedor, contTipo);
             break;
 
         case 4:
@@ -400,29 +402,29 @@ void incluirFornecedor(Fornecedor fornecedorN[], Fornecedor fornecedorA[], int &
     int contFornecedorT = 0;
     cadastrarFornecedor(fornecedorT, contFornecedorT, estado, contEstado);
 
-    int i = 0, j = 0, k = 0;
-    for (; i < contador && k < 1; k++) {
-        if (fornecedorA[i].idFornecedor < fornecedorT[j].idFornecedor) {
-            fornecedorN[k] = fornecedorA[i];
-            i++;
-        } else {
-            fornecedorN[k] = fornecedorT[j];
-            j++;
-        }
-    }
+    int i = 0, j = 0, z = 0;
+	for(;i < contador && j < contFornecedorT; z++) {
+		if (fornecedorA[i].idFornecedor < fornecedorT[j].idFornecedor) {
+			fornecedorN[z] = fornecedorA[i];
+			i++;
+		} else {
+			fornecedorN[z] = fornecedorT[j];
+			j++;
+		}
+	}
 
-    for (; i < contador; i++) {
-        fornecedorN[k] = fornecedorA[i];
-        k++;
-    }
+	for(; i < contador; i++) {
+		fornecedorN[z] = fornecedorA[i];
+		z++;
+	}
 
-    for (; j < 1; j++) {
-        fornecedorN[k] = fornecedorT[j];
-        k++;
-    }
-    // gravando dados no array original
+	for(; j < contFornecedorT; j++) {
+		fornecedorN[z] = fornecedorT[j];
+		z++;
+	}
+
     int x = 0;
-    for (; x < k; x++) {
+    for (; x < z; x++) {
         fornecedorA[x] = fornecedorN[x];
     }
     contador = x;
@@ -433,26 +435,33 @@ void incluirProdutos(Produtos produtoA[], Produtos produtoN[], int &contador, Fo
     Produtos produtoT[t];
     int contProdutoT = 0;
     cadastrarNovoProduto(produtoT, produtoA, contProdutoT, contador ,tipo, contTipo, fornecedor, contFornecedor);
-    int i = 0, j = 0, k = 0;
-    for (; i < contador && k < 1; k++) {
-        if (produtoA[i].idProduto < produtoT[j].idProduto) {
-            produtoN[k] = produtoA[i];
-            i++;
-        } else {
-            produtoN[k] = produtoT[j];
-            j++;
-        }
-    }
 
-    for (; i < contador; i++) {
-        produtoN[k] = produtoA[i];
-        k++;
-    }
+    int i = 0, j = 0, z = 0;
+	for(;i < contador && j < contProdutoT; z++) {
+		if (produtoA[i].idProduto < produtoT[j].idProduto) {
+			produtoN[z] = produtoA[i];
+			i++;
+		} else {
+			produtoN[z] = produtoT[j];
+			j++;
+		}
+	}
 
-    for (; j < 1; j++) {
-        produtoN[k] = produtoT[j];
-        k++;
+	for(; i < contador; i++) {
+		produtoN[z] = produtoA[i];
+		z++;
+	}
+
+	for(; j < contProdutoT; j++) {
+		produtoN[z] = produtoT[j];
+		z++;
+	}
+
+    int x = 0;
+    for (; x < z; x++) {
+        produtoA[x] = produtoN[x];
     }
+    contador = x;
     cout << "\t ===== Produtos Inseridos com Sucesso =====" << endl;
     system("PAUSE");
 }
@@ -558,39 +567,21 @@ int buscarProduto2(int codProduto, Produtos produto[], int contProduto) {
     }
 }
 
-void adicionarVenda(Produto produtos[], Fornecedor fornecedores[], TipoProd tipos[], int contProdutos, int contFornecedores, int contTipos) {
+void adicionarVenda(Produtos produtos[], Fornecedor fornecedores[], Tipo tipos[], int contProdutos, int contFornecedores, int contTipos) {
 	int codProduto = 0;
 	cout << "\t\tADICIONAR VENDA\n\n";
 	cout << " Informe o Codigo do produto a ser vendido: ";
 	cin >> codProduto;
 	
-	id = buscarProduto(codProduto, produtos, contProdutos);
-	if (id == 1) {
-        cout << ""
+	int indice = buscarProduto(codProduto, produtos, contProdutos);
+	if (produtos[indice].idProduto > 0) {
+        cout << " Codigo do produto: " << produtos[indice].idProduto;
+        cout << " Descricao do produto: " << produtos[indice].descricao;
+    } else {
+        system("cls");
+        cout << "\t\t===== Codigo do produto invalido! ===== ";
+        cout << "\n Venda Cancelada";
+        system("pause");
     }
-	buscarTipo(produto, produtos[], contTipos);
-	
-	aux = buscarFornecedor(produtos, fornecedores, contFornecedores);
-	
-	cout << "--------------------------" << endl;
-	cout << " Digite a Quantidade a ser Vendida deste Produto: ";
-	cin >> aux;
-	while(aux > p[id].qtdeEstoque) {
-		cout << "-----PEDIDO--ACIMA--DO--LIMITE-----" << endl;
-		cout << "\tLimite: " << p[id].qtdeEstoque << endl;
-		cout << " Digite a Quantidade a ser Vendida deste Produto: ";
-		cin >> aux;
-	}
-	cout << " Total do Pedido: R$ " << aux * p[id].valor <<endl;
-	cout << " Deseja Confirmar a Compra(S/N): ";
-	cin >> r;
-	r = toupper(r);
-	if(r == 'S') {
-		cout << " Venda Confirmada" << endl;
-		p[id].qtdeEstoque -= aux;
-	}
-	else {
-		cout << " Venda Cancelada" << endl;
-	}
-	system("PAUSE");
+
 }
