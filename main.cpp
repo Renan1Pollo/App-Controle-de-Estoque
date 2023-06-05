@@ -41,12 +41,17 @@ void cadastrarNovoProduto(Produtos *produtos, Produtos *produtosA, int &contador
 void incluirFornecedor(Fornecedor *fornecedorN, Fornecedor *fornecedorA, int &contador, Estado *estado, int contEstado);
 void incluirProdutos(Produtos *produtosA, Produtos *produtosB, int &contador, Fornecedor *fornecedor, int contFornecedor, Tipo *tipo, int contTipo);
 void adicionarVenda(Produtos *produtos, Fornecedor *fornecedores, Tipo *tipos, int contProdutos, int contFornecedores, int contTipos);
+void consultarProdutosEmEstoque(Produtos *produtos, Fornecedor *fornecedores, Tipo *tipos, int contProdutos, int contFornecedores, int contTipos);
+void consultarProdutosComEstoqueBaixo(Produtos *produtos, Fornecedor *fornecedores, int contProdutos, int contFornecedores);
 
 bool buscarTipo(int codTipo, Tipo *tipo, int contTipo);
 bool buscarEstado(int codEstado, Estado *estado, int contEstado);
 bool buscarFornecedor(int codFornecedor, Fornecedor *fornecedor, int contFornecedor);
 bool buscarProduto(int codProduto, Produtos *produto, int contProduto);
+
 int buscarProduto2(int codProduto, Produtos produto[], int contProduto);
+int buscarTipo2(int codTipo, Tipo tipo[], int contTipo);
+int buscarFornecedor2(int codFornecedor, Fornecedor fornecedor[], int contFornecedor);
 
 int main() {
     setlocale(LC_ALL, "portuguese");
@@ -173,8 +178,41 @@ int main() {
 
         case 4:
             system("cls");
-            system("pause");
-            opcao = 0;
+            int opcao3;
+            while (opcao3 != 3) {
+                system("cls");
+                cout << "\t\t Visualização\n\n";
+                cout << " 1 - Visualizar Produto em Estoque" << endl;
+                cout << " 2 - Visualizar Produtos com Estoque Baixo" << endl;
+                cout << " 3 - Voltar";
+
+                cout << "\n\n Escolha uma opcao: ";
+                cin >> opcao3;
+
+                switch (opcao3) {
+                case 1:
+                    system("cls");
+                    opcao3 = 0;
+                    consultarProdutosEmEstoque(produto, fornecedor, tipo, contProduto, contFornecedor, contTipo);
+                    break;
+                case 2:
+                    system("cls");
+                    consultarProdutosComEstoqueBaixo(produto, fornecedor, contProduto, contFornecedor);
+                    opcao3 = 0;
+                    break;
+                case 3:
+                    system("cls");
+                    cout << "Voltando...\n\n\n";
+                    break;
+                default:
+                    system("cls");
+                    cout << " Opcao invalida!\n\n\n";
+                    system("pause");
+                    opcao3 = 0;
+                    break;
+                }
+            }
+            opcao3 = 0;
             break;
 
         case 7:
@@ -465,6 +503,107 @@ void incluirProdutos(Produtos produtoA[], Produtos produtoN[], int &contador, Fo
     cout << "\t ===== Produtos Inseridos com Sucesso =====" << endl;
     system("PAUSE");
 }
+void adicionarVenda(Produtos produtos[], Fornecedor fornecedores[], Tipo tipos[], int contProdutos, int contFornecedores, int contTipos) {
+	int codProduto;
+	cout << "\t\tADICIONAR VENDA\n\n";
+	cout << " Informe o Codigo do produto a ser vendido: ";
+	cin >> codProduto;
+	
+	int indice = buscarProduto2(codProduto, produtos, contProdutos);
+	if (indice > 0) {
+        cout << "\n\t\t ===== Detalhes do Produto =====\n\n";
+        cout << " Codigo do produto: " << produtos[indice].idProduto << endl;
+        cout << " Descricao do produto: " << produtos[indice].descricao << endl;
+        cout << " Quantidade em Estoque: " << produtos[indice].qtdEstoque << endl;
+        cout << " Valor unitario: " << produtos[indice].valorUnit << endl;
+
+        int aux = buscarTipo2(produtos[indice].codTipo, tipos, contTipos);
+        cout << " Tipo: " << tipos[aux].descricao << endl;
+
+        aux = buscarFornecedor2(produtos[indice].codFornecedor, fornecedores, contFornecedores);
+        cout << " Fornecedor: " << fornecedores[aux].nome << endl;
+        cout << "\t\t ===============================\n\n";
+
+        cout << " Digite a Quantidade a ser Vendida deste Produto: ";
+        cin >> aux;
+        while(aux > produtos[indice].qtdEstoque) {
+		    cout << "\n\t ===== Quantidade em estoque insuficiente! =====" << endl;
+		    cout << " Limite: " << produtos[indice].qtdEstoque << endl;
+		    cout << " Digite a Quantidade a ser Vendida deste Produto: ";
+		    cin >> aux;
+	    }
+        char op;
+        cout <<  " Total do Pedido: R$ " << aux * produtos[indice].valorUnit << endl;
+	    cout << " Deseja Confirmar a Compra(S/N): ";
+	    cin >> op;
+        if (toupper(op) == 'S') {
+            system("cls");
+            cout << "\t\t===== Produto Vendido ===== ";
+            cout << "\n Venda Confirmada!" << endl;
+		    produtos[indice].qtdEstoque -= aux;
+            system("pause");
+        } else {
+            system("cls");
+            cout << "\n Venda nao Confirmada!" << endl;
+            system("pause");
+        }
+    } else {
+        system("cls");
+        cout << "\t\t===== Codigo do produto invalido! ===== ";
+        cout << "\n Venda Cancelada" << endl;
+        system("pause");
+    }
+
+}
+void consultarProdutosEmEstoque(Produtos produtos[], Fornecedor fornecedores[], Tipo tipos[], int contProdutos, int contFornecedores, int contTipos) {
+    int codProduto = 0;
+	cout << "\t\tConsultar Produtos em Estoque\n\n";
+	cout << " Informe o Codigo do produto a ser consultado: ";
+	cin >> codProduto;
+	
+	int indice = buscarProduto(codProduto, produtos, contProdutos);
+	if (produtos[indice].qtdEstoque > 0) {
+        cout << "\n\t\t ===== Detalhes do Produto =====\n\n";
+        cout << " Codigo do produto: " << produtos[indice].idProduto << endl;
+        cout << " Descricao do produto: " << produtos[indice].descricao << endl;
+        cout << " Quantidade em Estoque: " << produtos[indice].qtdEstoque << endl;
+        cout << " Quantidade Maxima de Estoque: " << produtos[indice].estoqueMax << endl;
+        cout << " Quantidade Minima de Estoque: " << produtos[indice].estoqueMin << endl;
+        cout << " Valor unitario: " << produtos[indice].valorUnit << endl;
+
+        int aux = buscarTipo2(produtos[indice].codTipo, tipos, contTipos);
+        cout << " Tipo: " << tipos[aux].descricao << endl;
+
+        aux = buscarFornecedor2(produtos[indice].codFornecedor, fornecedores, contFornecedores);
+        cout << " Fornecedor: " << fornecedores[aux].nome << endl;
+
+        cout << " Valor Total em Estoque: " << produtos[indice].qtdEstoque * produtos[indice].valorUnit << endl;
+        cout << "\t\t ===============================\n\n";
+    }
+}
+void consultarProdutosComEstoqueBaixo(Produtos produtos[], Fornecedor fornecedores[], int contProdutos, int contFornecedores) {
+    float total = 0;
+	cout << "\t\tConsultar Produtos em Estoque\n\n" << endl;
+	for(int i = 0; i < contProdutos; i++) {
+		if(produtos[i].estoqueMax < produtos[i].estoqueMin) {
+			int aux;
+			cout << "\n\t\t ===== Detalhes do Produto =====\n\n";
+			cout << " Codigo do Produto: " << produtos[i].idProduto << endl;
+			cout << " Descricao do Produto: "<< produtos[i].descricao << endl;
+			cout << " Quantidade de Estoque: "<< produtos[i].qtdEstoque << endl;
+			cout << " Quantidade Maxima de Estoque: " << produtos[i].estoqueMax;
+			
+			cout << " Quantidade a ser Comprada: "<< produtos[i].estoqueMax - produtos[i].qtdEstoque << endl;
+			total += (produtos[i].estoqueMax - produtos[i].qtdEstoque) * produtos[i].valorUnit;
+			cout << " Valor da Compra: "<< (produtos[i].estoqueMax - produtos[i].qtdEstoque) * produtos[i].valorUnit << endl;
+			
+			aux = buscarFornecedor2(produtos[i].codFornecedor, fornecedores, contFornecedores);
+			cout << " Nome do Fornecedor: " << fornecedores[aux].nome << endl;
+			cout << " Telefone do Fornecedor: " << fornecedores[aux].telefone << endl;
+            cout << "\t\t ===============================\n\n";
+		}
+	}
+}
 
 bool buscarEstado(int codEstado, Estado estado[], int contEstado) {
     int inicio = 0;
@@ -605,55 +744,8 @@ int buscarFornecedor2(int codFornecedor, Fornecedor fornecedor[], int contFornec
     }
 }
 
-void adicionarVenda(Produtos produtos[], Fornecedor fornecedores[], Tipo tipos[], int contProdutos, int contFornecedores, int contTipos) {
-	int codProduto = 0;
-	cout << "\t\tADICIONAR VENDA\n\n";
-	cout << " Informe o Codigo do produto a ser vendido: ";
-	cin >> codProduto;
-	
-	int indice = buscarProduto(codProduto, produtos, contProdutos);
-	if (produtos[indice].idProduto > 0) {
-        cout << "\n\t\t ===== Detalhes do Produto =====\n\n";
-        cout << " Codigo do produto: " << produtos[indice].idProduto << endl;
-        cout << " Descricao do produto: " << produtos[indice].descricao << endl;
-        cout << " Quantidade em Estoque: " << produtos[indice].qtdEstoque << endl;
-        cout << " Valor unitario: " << produtos[indice].valorUnit << endl;
 
-        int aux = buscarTipo2(produtos[indice].codTipo, tipos, contTipos);
-        cout << " Tipo: " << tipos[aux].descricao << endl;
 
-        aux = buscarFornecedor2(produtos[indice].codFornecedor, fornecedores, contFornecedores);
-        cout << " Fornecedor: " << fornecedores[aux].nome << endl;
-        cout << "\t\t ===============================\n\n";
 
-        cout << " Digite a Quantidade a ser Vendida deste Produto: ";
-        cin >> aux;
-        while(aux > produtos[indice].qtdEstoque) {
-		    cout << "\n\t ===== Quantidade em estoque insuficiente! =====" << endl;
-		    cout << " Limite: " << produtos[indice].qtdEstoque << endl;
-		    cout << " Digite a Quantidade a ser Vendida deste Produto: ";
-		    cin >> aux;
-	    }
-        char op;
-        cout <<  " Total do Pedido: R$ " << aux * produtos[indice].valorUnit << endl;
-	    cout << " Deseja Confirmar a Compra(S/N): ";
-	    cin >> toupper(op);
-        if (op = 'S') {
-            system("cls");
-            cout << "\t\t===== Produto Vendido ===== ";
-            cout << "\n Venda Confirmada!";
-		    produtos[indice].qtdEstoque -= aux;
-            system("pause");
-        } else {
-            system("cls");
-            cout << "\n Venda nao Confirmada!";
-            system("pause");
-        }
-    } else {
-        system("cls");
-        cout << "\t\t===== Codigo do produto invalido! ===== ";
-        cout << "\n Venda Cancelada";
-        system("pause");
-    }
 
-}
+
