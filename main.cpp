@@ -67,7 +67,6 @@ int main() {
     int contEstado = 0;
     int contTipo = 0;
     int contProduto = 0;
-
     int contFornecedor = 0;
 
     while (opcao != 7) {
