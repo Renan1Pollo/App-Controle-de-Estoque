@@ -181,7 +181,7 @@ int main() {
             int opcao3;
             while (opcao3 != 3) {
                 system("cls");
-                cout << "\t\t Visualização\n\n";
+                cout << "\t\t Visualizacao de Produtos\n\n";
                 cout << " 1 - Visualizar Produto em Estoque" << endl;
                 cout << " 2 - Visualizar Produtos com Estoque Baixo" << endl;
                 cout << " 3 - Voltar";
@@ -510,7 +510,7 @@ void adicionarVenda(Produtos produtos[], Fornecedor fornecedores[], Tipo tipos[]
 	cin >> codProduto;
 	
 	int indice = buscarProduto2(codProduto, produtos, contProdutos);
-	if (indice > 0) {
+	if (indice >= 0) {
         cout << "\n\t\t ===== Detalhes do Produto =====\n\n";
         cout << " Codigo do produto: " << produtos[indice].idProduto << endl;
         cout << " Descricao do produto: " << produtos[indice].descricao << endl;
@@ -561,8 +561,8 @@ void consultarProdutosEmEstoque(Produtos produtos[], Fornecedor fornecedores[], 
 	cout << " Informe o Codigo do produto a ser consultado: ";
 	cin >> codProduto;
 	
-	int indice = buscarProduto(codProduto, produtos, contProdutos);
-	if (produtos[indice].qtdEstoque > 0) {
+	int indice = buscarProduto2(codProduto, produtos, contProdutos);
+	if (produtos[indice].qtdEstoque > 0 && indice >= 0) {
         cout << "\n\t\t ===== Detalhes do Produto =====\n\n";
         cout << " Codigo do produto: " << produtos[indice].idProduto << endl;
         cout << " Descricao do produto: " << produtos[indice].descricao << endl;
@@ -579,19 +579,20 @@ void consultarProdutosEmEstoque(Produtos produtos[], Fornecedor fornecedores[], 
 
         cout << " Valor Total em Estoque: " << produtos[indice].qtdEstoque * produtos[indice].valorUnit << endl;
         cout << "\t\t ===============================\n\n";
+        system("pause");
     }
 }
 void consultarProdutosComEstoqueBaixo(Produtos produtos[], Fornecedor fornecedores[], int contProdutos, int contFornecedores) {
     float total = 0;
 	cout << "\t\tConsultar Produtos em Estoque\n\n" << endl;
 	for(int i = 0; i < contProdutos; i++) {
-		if(produtos[i].estoqueMax < produtos[i].estoqueMin) {
+		if(produtos[i].qtdEstoque < produtos[i].estoqueMin) {
 			int aux;
 			cout << "\n\t\t ===== Detalhes do Produto =====\n\n";
 			cout << " Codigo do Produto: " << produtos[i].idProduto << endl;
 			cout << " Descricao do Produto: "<< produtos[i].descricao << endl;
 			cout << " Quantidade de Estoque: "<< produtos[i].qtdEstoque << endl;
-			cout << " Quantidade Maxima de Estoque: " << produtos[i].estoqueMax;
+			cout << " Quantidade Maxima de Estoque: " << produtos[i].estoqueMax << endl;
 			
 			cout << " Quantidade a ser Comprada: "<< produtos[i].estoqueMax - produtos[i].qtdEstoque << endl;
 			total += (produtos[i].estoqueMax - produtos[i].qtdEstoque) * produtos[i].valorUnit;
@@ -601,6 +602,8 @@ void consultarProdutosComEstoqueBaixo(Produtos produtos[], Fornecedor fornecedor
 			cout << " Nome do Fornecedor: " << fornecedores[aux].nome << endl;
 			cout << " Telefone do Fornecedor: " << fornecedores[aux].telefone << endl;
             cout << "\t\t ===============================\n\n";
+            system("pause");
+            system("cls");
 		}
 	}
 }
