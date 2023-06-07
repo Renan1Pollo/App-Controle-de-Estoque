@@ -745,9 +745,3 @@ int buscarFornecedor2(int codFornecedor, Fornecedor fornecedor[], int contFornec
         return -1;
     }
 }
-
-
-
-
-
-
